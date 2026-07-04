@@ -2,7 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import switch
 
-from .. import zalejvatko_ns, CHANNEL_SCHEMA, CONF_ZALEJVATKO_ID, CONF_CHANNEL
+from . import zalejvatko_ns, CHANNEL_SCHEMA, CONF_ZALEJVATKO_ID, CONF_CHANNEL
 
 ZalejvatkoChannelSwitch = zalejvatko_ns.class_(
     "ZalejvatkoChannelSwitch", switch.Switch, cg.Component

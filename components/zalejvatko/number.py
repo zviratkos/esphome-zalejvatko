@@ -3,7 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import number
 from esphome.const import CONF_UNIT_OF_MEASUREMENT, CONF_ICON
 
-from .. import zalejvatko_ns, CHANNEL_SCHEMA, CONF_ZALEJVATKO_ID, CONF_CHANNEL
+from . import zalejvatko_ns, CHANNEL_SCHEMA, CONF_ZALEJVATKO_ID, CONF_CHANNEL
 
 ZalejvatkoChannelDoseNumber = zalejvatko_ns.class_(
     "ZalejvatkoChannelDoseNumber", number.Number, cg.Component
