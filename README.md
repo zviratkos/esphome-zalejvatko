@@ -1,5 +1,14 @@
 # Zalejvatko - ESPHome external component
 
+**Verze: v2**
+
+## Changelog
+
+- **v2**: opravena struktura platform (`switch.py`, `number.py`, `text.py`,
+  `button.py` prime v `components/zalejvatko/`, ne v podadresarich s
+  `__init__.py` - odpovida standardni ESPHome konvenci).
+- **v1**: prvni funkcni navrh (hub + 4 platformy + rozvrh podle NTP casu).
+
 Prepis puvodniho Arduino/ESP32 firmware (`zalejvatko.ino` + `deska.h`, `eeprom.h`,
 `webserver.h`, `wifi.h`, `serial.h`) do ESPHome external component.
 
@@ -79,11 +88,11 @@ Vsechny ctyri se registruji do hubu pres `zalejvatko_id: hub` + `channel: N`
 
 ```
 components/zalejvatko/
-  __init__.py          - hlavni hub, schema + codegen
+  __init__.py           - hlavni hub, schema + codegen
   zalejvatko.h/.cpp     - C++ hub: HW driver, rozvrh, perzistence
-  switch/__init__.py    - platforma "povoleno"
-  number/__init__.py    - platforma "davka"
-  text/__init__.py      - platforma "rozvrh"
-  button/__init__.py    - platforma "zalit hned"
+  switch.py             - platforma "povoleno"
+  number.py             - platforma "davka"
+  text.py               - platforma "rozvrh"
+  button.py             - platforma "zalit hned"
 example.yaml            - ukazkova konfigurace (1 kanal, vzor pro dalsich 15)
 ```
