@@ -44,49 +44,190 @@ zalejvatko:
   pump_pin: GPIO19
   ml_per_sec: 4.0   # kalibrace: kolik ml cerpadlo dopravi za 1 sekundu - zmerit a upravit
 
-# --- kanal 0 ---
+
+# --- kanaly 0-7 (pro dalsich 8 kanalu az do 15 pridej dalsi bloky se stejnym vzorem) ---
 switch:
   - platform: zalejvatko
     zalejvatko_id: hub
     channel: 0
+    id: sw_ch0
     name: "Kvetina 1 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 1
+    id: sw_ch1
+    name: "Kvetina 2 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 2
+    id: sw_ch2
+    name: "Kvetina 3 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 3
+    id: sw_ch3
+    name: "Kvetina 4 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 4
+    id: sw_ch4
+    name: "Kvetina 5 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 5
+    id: sw_ch5
+    name: "Kvetina 6 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 6
+    id: sw_ch6
+    name: "Kvetina 7 - povoleno"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 7
+    id: sw_ch7
+    name: "Kvetina 8 - povoleno"
 
 number:
   - platform: zalejvatko
     zalejvatko_id: hub
     channel: 0
     name: "Kvetina 1 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 1
+    name: "Kvetina 2 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 2
+    name: "Kvetina 3 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 3
+    name: "Kvetina 4 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 4
+    name: "Kvetina 5 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 5
+    name: "Kvetina 6 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 6
+    name: "Kvetina 7 - davka"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 7
+    name: "Kvetina 8 - davka"
 
 text:
   - platform: zalejvatko
     zalejvatko_id: hub
     channel: 0
+    id: sched_ch0
     name: "Kvetina 1 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 1
+    id: sched_ch1
+    name: "Kvetina 2 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 2
+    id: sched_ch2
+    name: "Kvetina 3 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 3
+    id: sched_ch3
+    name: "Kvetina 4 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 4
+    id: sched_ch4
+    name: "Kvetina 5 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 5
+    id: sched_ch5
+    name: "Kvetina 6 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 6
+    id: sched_ch6
+    name: "Kvetina 7 - rozvrh"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 7
+    id: sched_ch7
+    name: "Kvetina 8 - rozvrh"
+
+text_sensor:
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 0
+    name: "Kvetina 1 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 1
+    name: "Kvetina 2 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 2
+    name: "Kvetina 3 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 3
+    name: "Kvetina 4 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 4
+    name: "Kvetina 5 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 5
+    name: "Kvetina 6 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 6
+    name: "Kvetina 7 - posledni zaliti"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 7
+    name: "Kvetina 8 - posledni zaliti"
 
 button:
   - platform: zalejvatko
     zalejvatko_id: hub
     channel: 0
     name: "Kvetina 1 - zalit hned"
-
-# --- kanal 1 (a takto dal az do kanalu 15) ---
-# switch:
-#   - platform: zalejvatko
-#     zalejvatko_id: hub
-#     channel: 1
-#     name: "Kvetina 2 - povoleno"
-# number:
-#   - platform: zalejvatko
-#     zalejvatko_id: hub
-#     channel: 1
-#     name: "Kvetina 2 - davka"
-# text:
-#   - platform: zalejvatko
-#     zalejvatko_id: hub
-#     channel: 1
-#     name: "Kvetina 2 - rozvrh"
-# button:
-#   - platform: zalejvatko
-#     zalejvatko_id: hub
-#     channel: 1
-#     name: "Kvetina 2 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 1
+    name: "Kvetina 2 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 2
+    name: "Kvetina 3 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 3
+    name: "Kvetina 4 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 4
+    name: "Kvetina 5 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 5
+    name: "Kvetina 6 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 6
+    name: "Kvetina 7 - zalit hned"
+  - platform: zalejvatko
+    zalejvatko_id: hub
+    channel: 7
+    name: "Kvetina 8 - zalit hned"

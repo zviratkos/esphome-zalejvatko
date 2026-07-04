@@ -1,5 +1,6 @@
 #include "zalejvatko.h"
 #include "esphome/core/log.h"
+#include "esphome/core/time.h"
 #include <cstdlib>
 #include <cstring>
 
@@ -68,6 +69,21 @@ void ZalejvatkoComponent::save_channel_(uint8_t channel) {
   this->channel_prefs_[channel].save(&this->channels_[channel]);
 }
 
+std::string ZalejvatkoComponent::format_epoch_(uint32_t epoch) {
+  if (epoch == 0)
+    return "nikdy";
+  ESPTime t = ESPTime::from_epoch_local(epoch);
+  if (!t.is_valid())
+    return "nikdy";
+  return t.strftime("%Y-%m-%d %H:%M:%S");
+}
+
+void ZalejvatkoComponent::publish_last_watered_(uint8_t channel) {
+  if (this->last_watered_sensors_[channel] == nullptr)
+    return;
+  this->last_watered_sensors_[channel]->publish_state(this->format_epoch_(this->channels_[channel].last_watered_epoch));
+}
+
 // ---------------------------------------------------------------------
 // registrace entit
 // ---------------------------------------------------------------------
@@ -83,6 +99,10 @@ void ZalejvatkoComponent::register_schedule_text(uint8_t channel, ZalejvatkoChan
 void ZalejvatkoComponent::register_water_now_button(uint8_t channel, ZalejvatkoChannelWaterNowButton *btn) {
   this->water_now_buttons_[channel] = btn;
 }
+void ZalejvatkoComponent::register_last_watered_sensor(uint8_t channel, ZalejvatkoChannelLastWateredTextSensor *sens) {
+  this->last_watered_sensors_[channel] = sens;
+  this->publish_last_watered_(channel);
+}
 
 // ---------------------------------------------------------------------
 // zapis z entit -> hub
@@ -90,17 +110,31 @@ void ZalejvatkoComponent::register_water_now_button(uint8_t channel, ZalejvatkoC
 void ZalejvatkoComponent::set_channel_enabled(uint8_t channel, bool enabled) {
   this->channels_[channel].enabled = enabled;
   this->save_channel_(channel);
+  ESP_LOGI(TAG, "Kanal %u %s", channel, enabled ? "povolen" : "zakazan");
 }
 
 void ZalejvatkoComponent::set_channel_dose(uint8_t channel, float dose_ml) {
   this->channels_[channel].dose_ml = dose_ml;
   this->save_channel_(channel);
+  ESP_LOGI(TAG, "Kanal %u: davka nastavena na %.0f ml", channel, dose_ml);
 }
 
 void ZalejvatkoComponent::set_channel_schedule(uint8_t channel, const std::string &schedule_csv) {
   strncpy(this->channels_[channel].schedule, schedule_csv.c_str(), MAX_SCHEDULE_STRLEN - 1);
   this->channels_[channel].schedule[MAX_SCHEDULE_STRLEN - 1] = 0;
   this->save_channel_(channel);
+
+  ScheduleSlot slots[MAX_SCHEDULE_SLOTS];
+  this->parse_schedule_(this->channels_[channel].schedule, slots);
+  bool any = false;
+  for (uint8_t s = 0; s < MAX_SCHEDULE_SLOTS; s++) {
+    if (slots[s].hour < 0)
+      continue;
+    ESP_LOGI(TAG, "Nastaveno %02d:%02d, kanal %u", slots[s].hour, slots[s].minute, channel);
+    any = true;
+  }
+  if (!any)
+    ESP_LOGI(TAG, "Kanal %u: rozvrh vymazan (zadny platny cas)", channel);
 }
 
 void ZalejvatkoComponent::water_now(uint8_t channel) {
@@ -200,6 +234,7 @@ void ZalejvatkoComponent::start_watering_(uint8_t channel, float dose_ml) {
   this->channels_[channel].last_watered_epoch =
       (this->time_ != nullptr && this->time_->now().is_valid()) ? this->time_->now().timestamp : 0;
   this->save_channel_(channel);
+  this->publish_last_watered_(channel);
 
   ESP_LOGI(TAG, "Zalevam kanal %u, %.0f ml (%.1f s)", channel, dose_ml, duration_s);
   this->address_mux_(channel);

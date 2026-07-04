@@ -8,6 +8,7 @@
 #include "esphome/components/number/number.h"
 #include "esphome/components/text/text.h"
 #include "esphome/components/button/button.h"
+#include "esphome/components/text_sensor/text_sensor.h"
 
 #include <vector>
 #include <string>
@@ -44,6 +45,7 @@ class ZalejvatkoChannelSwitch;
 class ZalejvatkoChannelDoseNumber;
 class ZalejvatkoChannelScheduleText;
 class ZalejvatkoChannelWaterNowButton;
+class ZalejvatkoChannelLastWateredTextSensor;
 
 class ZalejvatkoComponent : public PollingComponent {
  public:
@@ -62,6 +64,7 @@ class ZalejvatkoComponent : public PollingComponent {
   void register_dose_number(uint8_t channel, ZalejvatkoChannelDoseNumber *num);
   void register_schedule_text(uint8_t channel, ZalejvatkoChannelScheduleText *txt);
   void register_water_now_button(uint8_t channel, ZalejvatkoChannelWaterNowButton *btn);
+  void register_last_watered_sensor(uint8_t channel, ZalejvatkoChannelLastWateredTextSensor *sens);
 
   // ---- volano z entit pri zmene stavu z HA / UI ----
   void set_channel_enabled(uint8_t channel, bool enabled);
@@ -86,6 +89,8 @@ class ZalejvatkoComponent : public PollingComponent {
   void check_running_watering_();
   void start_watering_(uint8_t channel, float dose_ml);
   void stop_watering_();
+  void publish_last_watered_(uint8_t channel);
+  std::string format_epoch_(uint32_t epoch);
 
   time::RealTimeClock *time_{nullptr};
 
@@ -105,6 +110,7 @@ class ZalejvatkoComponent : public PollingComponent {
   ZalejvatkoChannelDoseNumber *dose_numbers_[MAX_CHANNELS]{nullptr};
   ZalejvatkoChannelScheduleText *schedule_texts_[MAX_CHANNELS]{nullptr};
   ZalejvatkoChannelWaterNowButton *water_now_buttons_[MAX_CHANNELS]{nullptr};
+  ZalejvatkoChannelLastWateredTextSensor *last_watered_sensors_[MAX_CHANNELS]{nullptr};
 
   std::deque<WateringCommand> queue_;
   bool watering_in_progress_{false};
@@ -168,6 +174,17 @@ class ZalejvatkoChannelWaterNowButton : public button::Button, public Component 
 
  protected:
   void press_action() override { this->parent_->water_now(this->channel_); }
+  ZalejvatkoComponent *parent_{nullptr};
+  uint8_t channel_{0};
+};
+
+// jen zobrazuje stav, hub do ni zapisuje pri kazdem zalevani - neni to "controllable" entita
+class ZalejvatkoChannelLastWateredTextSensor : public text_sensor::TextSensor, public Component {
+ public:
+  void set_parent(ZalejvatkoComponent *parent) { this->parent_ = parent; }
+  void set_channel(uint8_t channel) { this->channel_ = channel; }
+
+ protected:
   ZalejvatkoComponent *parent_{nullptr};
   uint8_t channel_{0};
 };

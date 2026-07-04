@@ -1,9 +1,22 @@
 # Zalejvatko - ESPHome external component
 
-**Verze: v2**
+**Verze: v6**
 
 ## Changelog
 
+- **v6**: pridana nova platforma `text_sensor` - "posledni zaliti" per kanal
+  (citelny format `YYYY-MM-DD HH:MM:SS`, "nikdy" pokud se jeste nezalevalo).
+  `example.yaml` rozsiren na kanaly 0-7 se vsemi peti entitami.
+- **v5**: prehlednejsi logovani - hlaseni pri nastaveni rozvrhu (kazdy cas
+  zvlast), povoleni/zakazani kanalu, zmene davky, zarazeni do fronty
+  (naplanovane i rucni) a start/konec zalevani.
+- **v4**: opraveno chybejici povinne pole `mode` u `text.zalejvatko` platformy
+  (`'mode' is a required option`) - pridan vychozi `mode: text` primo do
+  schema, takze uz to neni potreba psat rucne v YAML.
+- **v3**: oprava relativnich importu v `switch.py`/`number.py`/`text.py`/`button.py`
+  (`from .. import` -> `from . import`) - po zplosteni struktury ve v2 zustal
+  spatny pocet tecek, coz zpusobovalo `ImportError: cannot import name
+  'zalejvatko_ns' from 'esphome.components'`.
 - **v2**: opravena struktura platform (`switch.py`, `number.py`, `text.py`,
   `button.py` prime v `components/zalejvatko/`, ne v podadresarich s
   `__init__.py` - odpovida standardni ESPHome konvenci).
@@ -43,9 +56,10 @@ takze validace probiha primo na zarizeni.
 | Platforma | Ucel |
 |---|---|
 | `switch` | povolit/zakazat kanal |
-| `number` | davka v ml |
+| `number` | davka v ml (objem na jedno zalevani) |
 | `text`   | rozvrh (CSV casu HH:MM) |
 | `button` | okamzite zalit (mimo rozvrh) |
+| `text_sensor` | posledni zaliti (jen ke cteni, format `YYYY-MM-DD HH:MM:SS`) |
 
 Vsechny ctyri se registruji do hubu pres `zalejvatko_id: hub` + `channel: N`
 (viz `example.yaml`).
@@ -94,5 +108,6 @@ components/zalejvatko/
   number.py             - platforma "davka"
   text.py               - platforma "rozvrh"
   button.py             - platforma "zalit hned"
-example.yaml            - ukazkova konfigurace (1 kanal, vzor pro dalsich 15)
+  text_sensor.py        - platforma "posledni zaliti"
+example.yaml            - ukazkova konfigurace (kanaly 0-7, vzor pro dalsich 8)
 ```
